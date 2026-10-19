@@ -9,7 +9,8 @@ services:
     restart: always
     volumes:
       - .:/workspace:cached
-      # Projects and mdv.sqlite3, on the instance's data disk so they survive a restart.
+      # MDV's working copy of projects and mdv.sqlite3. Instance storage is ephemeral,
+      # so the workspace bucket holds the durable copy.
       - mdv-data:/app/mdv
     # Publish exactly one port. The proxy agent takes the first port bound on 0.0.0.0.
     ports:

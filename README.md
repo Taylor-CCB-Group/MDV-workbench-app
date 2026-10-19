@@ -34,7 +34,8 @@ The compose file sets MDV up for a single user per instance:
 
 - authentication is off, because the Workbench proxy decides who can reach the app and
   workspace membership decides who can see its projects
-- projects and the SQLite database live in `/app/mdv`, on the instance's data disk
+- MDV keeps its working copy of projects and the SQLite database in `/app/mdv`, on the
+  instance
 - per-file database sync is off, so startup does not walk every file in every project
 - the chat extension is not loaded
 
@@ -48,9 +49,14 @@ in Artifact Registry.
 
 ## What persists
 
-Projects and the SQLite database live in the `mdv-data` volume on the instance's data disk, so
-stopping and starting the app keeps them. Deleting the app deletes its disks and everything on
-them.
+Workbench app storage is ephemeral, so treat everything on the instance as temporary. That
+includes the `mdv-data` volume holding the projects and the SQLite database, which can be lost
+when the app stops or restarts and is always lost when the app is deleted.
+
+The durable copy of a project belongs in the workspace bucket. MDV keeps a working copy in
+`/app/mdv` because its HDF5 and SQLite files need local disk, and a sync between that working
+copy and the bucket is planned. Until the sync is in place, projects do not outlive the
+instance.
 
 ## Running it locally
 
