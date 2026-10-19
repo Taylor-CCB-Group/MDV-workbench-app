@@ -1,0 +1,40 @@
+services:
+  app:
+    # Workbench's proxy agent finds the app by this exact name.
+    container_name: "application-server"
+    shm_size: "${templateOption:shmSize}"
+    mem_limit: "${templateOption:memoryLimit}"
+    # The MDV image for Workbench, pulled from Artifact Registry.
+    image: "REPLACE_WITH_ARTIFACT_REGISTRY_IMAGE"
+    restart: always
+    volumes:
+      - .:/workspace:cached
+      # Projects and mdv.sqlite3, on the instance's data disk so they survive a restart.
+      - mdv-data:/app/mdv
+    # Publish exactly one port. The proxy agent takes the first port bound on 0.0.0.0.
+    ports:
+      - 5055:5055
+    environment:
+      ENABLE_AUTH: "0"
+      DB_BACKEND: "sqlite"
+      SQLITE_DB_PATH: "/app/mdv/mdv.sqlite3"
+      ENABLE_FILE_SYNC: "0"
+      # Lists the extensions to load, leaving out chat.
+      MDV_USER_CONFIG_PATH: "/workspace/mdv-config.json"
+    networks:
+      - app-network
+    # Required for gcsfuse to mount workspace resources inside the container.
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+    security_opt:
+      - apparmor:unconfined
+
+volumes:
+  mdv-data:
+
+networks:
+  # Created by Workbench outside this file.
+  app-network:
+    external: true

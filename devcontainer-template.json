@@ -1,0 +1,30 @@
+{
+  "id": "mdv",
+  "version": "0.1.0",
+  "name": "MDV",
+  "description": "Multi-Dimensional Viewer on Verily Workbench (Port: 5055, User: pn)",
+  "options": {
+    "cloud": {
+      "type": "string",
+      "enum": ["gcp"],
+      "default": "gcp",
+      "description": "Cloud provider"
+    },
+    "login": {
+      "type": "string",
+      "description": "Whether to log in to the Workbench CLI",
+      "proposals": ["true", "false"],
+      "default": "false"
+    },
+    "shmSize": {
+      "type": "string",
+      "description": "Shared memory size for the application-server container",
+      "default": "64m"
+    },
+    "memoryLimit": {
+      "type": "string",
+      "description": "Memory limit for the application-server container",
+      "default": "8192m"
+    }
+  }
+}
