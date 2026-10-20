@@ -4,17 +4,18 @@
   "service": "app",
   "shutdownAction": "none",
   "workspaceFolder": "/workspace",
-  // Workbench copies its startupscript/ directory into this repository before launch.
-  // The scripts run as root through remoteUser, then act as pn with `sudo -u pn`.
+  // Verily's startup scripts are baked into the MDV image at /opt/workbench/startupscript,
+  // because Workbench only provides them to forks of its own template repository.
+  // They run as root through remoteUser, then act as pn with `sudo -u pn`.
   "postCreateCommand": [
-    "./startupscript/post-startup.sh",
+    "/opt/workbench/startupscript/post-startup.sh",
     "pn",
     "/home/pn",
     "${templateOption:cloud}",
     "${templateOption:login}"
   ],
   "postStartCommand": [
-    "./startupscript/remount-on-restart.sh",
+    "/opt/workbench/startupscript/remount-on-restart.sh",
     "pn",
     "/home/pn",
     "${templateOption:cloud}",
